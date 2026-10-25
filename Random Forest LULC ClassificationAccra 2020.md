@@ -600,3 +600,34 @@ Calculate producer's accuracy, consumer's accuracy, recall, precision and F1-sco
 | 🎯 **Overall accuracy** | How many predictions were correct overall? |
 | 🤝 **Kappa** | How much agreement is there after removing chance? |
 | 📊 **Confusion matrix** | Which classes are being confused? |
+
+
+```py
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+
+model = make_pipeline(
+    StandardScaler(),
+    SVC(kernel="rbf")
+)
+
+params = {
+    "svc__C": [0.1, 1, 10, 100],
+    "svc__gamma": [0.01, 0.1, 0.5, 1, 10]
+}
+
+search = GridSearchCV(
+    model,
+    params,
+    cv=5,
+    scoring="accuracy",
+    n_jobs=-1
+)
+
+search.fit(X_train, y_train)
+
+print("Best settings:", search.best_params_)
+print("Best CV accuracy:", search.best_score_)
+```
